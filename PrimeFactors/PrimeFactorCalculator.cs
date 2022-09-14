@@ -7,24 +7,23 @@
         public List<int> GeneratePrimeFactorsFor(int iNumber)
         {
             if (iNumber < 0) throw new ArgumentOutOfRangeException(nameof(iNumber));
-            if (iNumber == 0) return new List<int>();
+
+            return GetPrimeFactorFor(iNumber, 0);
+        }
+
+        private List<int> GetPrimeFactorFor(int iNumber, int iPrimeIndex)
+        {
+            if (iNumber <= 1) return new List<int>();
 
             List<int> primeFactors = new List<int>();
 
-            foreach (int prime_number in prime_numbers)
+            while (iNumber % prime_numbers[iPrimeIndex] == 0 && iNumber / prime_numbers[iPrimeIndex] != 0)
             {
-                if (prime_number == iNumber)
-                {
-                    primeFactors.Add(prime_number);
-                    break;
-                }
-                
-                while (iNumber % prime_number == 0 && iNumber / prime_number != 0)
-                {
-                    iNumber /= prime_number;
-                    primeFactors.Add(prime_number);
-                }
+                iNumber /= prime_numbers[iPrimeIndex];
+                primeFactors.Add(prime_numbers[iPrimeIndex]);
             }
+
+            primeFactors.AddRange(GetPrimeFactorFor(iNumber, ++iPrimeIndex));
 
             return primeFactors;
         }
