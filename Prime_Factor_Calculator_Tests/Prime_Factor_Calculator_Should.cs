@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using PrimeFactors;
 
@@ -21,15 +22,22 @@ namespace Prime_Factor_Calculator_Tests
         }
 
         [Test]
-        public void return_two_for_input_of_two()
+        [TestCase(2, new int[] { 2 })]
+        [TestCase(3, new int[] { 3 })]
+        [TestCase(4, new int[] { 2, 2 })]
+        [TestCase(5, new int[] { 5 })]
+        [TestCase(6, new int[] { 2, 3 })]
+        [TestCase(8, new int[] { 2, 2, 2 })]
+        [TestCase(15, new int[] { 3, 5 })]
+        [TestCase(460, new int[] { 2, 2, 5, 23 })]
+        public void return_primefactors_for_input(int number, int[] expectedResult)
         {
-            Assert.That(primeFactorCalculator.GeneratePrimeFactorsFor(2), Is.EqualTo(2));
-        }
-
-        [Test]
-        public void return_three_for_input_of_three()
-        {
-            Assert.That(primeFactorCalculator.GeneratePrimeFactorsFor(3), Is.EqualTo(3));
+            List<int> primeFactors = primeFactorCalculator.GeneratePrimeFactorsFor(number);
+            Assert.Multiple(() =>
+            {
+                Assert.That(primeFactors.Count, Is.EqualTo((expectedResult.Length)));
+                Assert.That(primeFactors, Is.EquivalentTo(expectedResult));
+            });
         }
     }
 }
